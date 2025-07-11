@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Flashcards NL → Amazigh</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Flashcards</h1>
+    <p class="subtitle">Nederlands → Amazigh</p>
+    <div class="progress-bar-container"><div class="progress-bar" id="flashcardProgress"></div></div>
+    <div class="flashcard-area">
+      <div class="flashcard" id="flashcard">
+        <div class="flashcard-front" id="flashcardFront"></div>
+        <div class="flashcard-back" id="flashcardBack"></div>
+      </div>
+    </div>
+    <div class="controls">
+      <button id="nextFlashcardBtn" style="margin:auto;">Volgende</button>
+    </div>
+  </div>
+  <script>
+    const words = [
+      { amazigh: "Mani ghadha7adh?", dutch: "Waar ga je heen?" },
+      { amazigh: "Adhaw7agh adhadath.", dutch: "Ik ga terug naar huis." },
+      { amazigh: "mindanidh?", dutch: "Wat zei je?" },
+      { amazigh: "manidhajidh?", dutch: "Waar ben je?" },
+      { amazigh: "aqay ki dhamzidha?", dutch: "Ik ben bij de moskee." },
+      { amazigh: "aqay awparki.", dutch: "Ik ben bij het park." },
+      { amazigh: "Marmi tghadh-khashadh?", dutch: "Waar kom je aan?" },
+      { amazigh: "nash adha-hwigh gha al hoceima anhara.", dutch: "Ik ga naar Hoceima vandaag." },
+      { amazigh: "min dhanidh?", dutch: "Wat zei je?" },
+      { amazigh: "azoegh amkan adheqimagh.", dutch: "Ik wil een plek om te zitten." },
+      { amazigh: "ghak shien plasa?", dutch: "Heb je plek (taxi)?" },
+      { amazigh: "Adhzidh shi tilifoen ino?", dutch: "Heb je m’n telefoon gezien?" },
+      { amazigh: "mash7ar dhas takadh?", dutch: "Voor hoeveel verkoop je hem?" },
+      { amazigh: "nash o7ragh azough adhatsagh.", dutch: "Ik ben moe, ik wil slapen." },
+      { amazigh: "nash anhara adah7agh arab7a.", dutch: "Ik ga vandaag naar het strand." },
+      { amazigh: "oshayd sak eni.", dutch: "Geef me die tas." },
+      { amazigh: "Nesh zi boghamar", dutch: "Ik kom uit Boghamer." },
+      { amazigh: "azough ijen dziyat waman", dutch: "Ik wil een fles water." },
+      { amazigh: "oshayd ijen narkas watay se ne3ne3", dutch: "Geef mij een glas met ne3ne3 thee." },
+      { amazigh: "mash7ar i taxi gha bni bouiyach", dutch: "Hoeveel kost de taxi naar Bni Bouayach?" },
+      { amazigh: "tbarkallah => llah ibarak fik.", dutch: "Tbarkallah hoeft niet." },
+      { amazigh: "sa7a labas? Kolshi mli7?", dutch: "Hoe gaat het? Gaat het goed?" },
+      { amazigh: "nash mamis an jamal nar7aj mekkie el Ouassaidi.", dutch: "Ik ben zoon van Jamal, zoon van grootvader Mekkie el Ouassaidi." },
+      { amazigh: "alla oghay shi", dutch: "Nee, ik heb dat niet." },
+      { amazigh: "Marmi tghadh-khashadh", dutch: "Wanneer kom je aan?" },
+      { amazigh: "Araja aqay osighd.", dutch: "Wacht, ik kom eraan." },
+      { amazigh: "oghay woerwakht.", dutch: "Ik heb geen tijd." },
+      { amazigh: "ozamagh shie nhara.", dutch: "Ik kan vandaag niet." },
+      { amazigh: "mo7ar", dutch: "Waarschijnlijk niet." },
+      { amazigh: "ari khadroej ksid dhisira", dutch: "Ga naar boven, haal schoenen." },
+      { amazigh: "ahwa ghal-karaj", dutch: "Ga naar beneden naar de garage." },
+      { amazigh: "azam srajam.", dutch: "Maak de raam open." },
+      { amazigh: "Oshayd menu.", dutch: "Geef me de menu." },
+      { amazigh: "Azoegh kamasita amtha.", dutch: "Ik wil een shirt als deze." },
+      { amazigh: "Sam7ay ashe-sqsigh.", dutch: "Sorry, mag ik wat vragen?" },
+      { amazigh: "Ari okjena.", dutch: "Ga naar boven." },
+      { amazigh: "Ahwa awaday.", dutch: "Ga naar beneden." },
+      { amazigh: "Awid erkas zi koziena.", dutch: "Haal glas van de keuken." },
+      { amazigh: "Awa7 ana7 awara.", dutch: "Kom, we gaan naar buiten." },
+      { amazigh: "Marmi gha nafagh.", dutch: "Wanneer gaan we naar buiten?" },
+      { amazigh: "I3atta ar7ar", dutch: "Tijd is voorbij/te laat." },
+      { amazigh: "3adh ar7a7", dutch: "Het is nog geen tijd." },
+      { amazigh: "Adha-tfagh taxi gha bokidan.", dutch: "Ik ga een taxi nemen naar Bokidan." },
+      { amazigh: "oshayd ramfata7 natomowin.", dutch: "Geef me de sleutels van de auto." },
+      { amazigh: "manidhaja adh-sa3at anyemma", dutch: "Waar is de horloge van (m’n) moeder?" },
+      { amazigh: "oji mimi.", dutch: "Hoeft niet." },
+      { amazigh: "a7dhajagh ijen narkosi", dutch: "Ik ga een stoel pakken/aanschaffen." },
+      { amazigh: "asad dha ataqimadh", dutch: "Kom hier zitten." },
+      { amazigh: "Nashnin anawa7 al3ama ghal-maghrib.", dutch: "Wij gaan deze week naar Marokko." },
+      { amazigh: "Ana7 ijen nesimana gha-sapanja (malaga)", dutch: "We gaan een week naar Spanje." },
+      { amazigh: "Iqsa7 shwitin ar7ar", dutch: "De tijd is beetje gebroken/saai." }
+    ];
+    let currentIndex = 0;
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+    shuffle(words);
+    function updateProgressBar(barElem, value, total) {
+      let percent = total ? Math.min(100, Math.round((value / total) * 100)) : 0;
+      barElem.style.width = percent + "%";
+      barElem.textContent = percent ? percent + "%" : "";
+    }
+    function showFlashcard() {
+      let w = words[currentIndex];
+      let front = w.dutch;
+      let back = w.amazigh;
+      flashcardFront.textContent = front;
+      flashcardBack.textContent = back;
+      flashcard.classList.remove('flip');
+      flashcardBack.style.visibility = "hidden";
+      nextFlashcardBtn.disabled = true;
+      updateProgressBar(flashcardProgress, currentIndex, words.length);
+      if (currentIndex >= words.length) {
+        flashcardFront.textContent = "";
+        flashcardBack.textContent = "";
+        nextFlashcardBtn.disabled = true;
+        flashcardBack.style.visibility = "hidden";
+        flashcard.classList.remove('flip');
+        flashcardFront.textContent = "Klaar! Je hebt alle woorden gehad.";
+      }
+    }
+    flashcard.onclick = () => {
+      if (currentIndex >= words.length) return;
+      flashcard.classList.add('flip');
+      flashcardBack.style.visibility = "visible";
+      nextFlashcardBtn.disabled = false;
+    };
+    nextFlashcardBtn.onclick = () => { currentIndex++; showFlashcard(); };
+    showFlashcard();
+  </script>
+</body>
+</html>

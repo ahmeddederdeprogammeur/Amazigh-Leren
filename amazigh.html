@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Overhoren | Startmenu</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* You can keep this or use your existing style.css */
+    .hidden { display:none; }
+    .centered { display:flex; flex-direction:column; align-items:center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Main Language Choice -->
+    <div id="mainMenu" class="centered">
+      <h1>Overhoren</h1>
+      <p class="subtitle">Kies een taalrichting:</p>
+      <div class="mode-buttons">
+        <button id="toNlAmazigh" class="mode-btn">Nederlands → Amazigh</button>
+        <button id="toAmazighNl" class="mode-btn">Amazigh → Nederlands</button>
+      </div>
+    </div>
+    <!-- Mode Choice (hidden initially) -->
+    <div id="subMenu" class="centered hidden">
+      <h2 id="directionTitle"></h2>
+      <p class="subtitle">Kies een oefenmodus:</p>
+      <div class="mode-buttons">
+        <a id="overhorenBtn" class="mode-btn" href="#">Overhoren</a>
+        <a id="flashcardsBtn" class="mode-btn" href="#">Flashcards</a>
+      </div>
+      <button id="backBtn" class="back-btn" style="margin-top:12px;">← Terug</button>
+    </div>
+  </div>
+  <script>
+    // DOM
+    const mainMenu = document.getElementById('mainMenu');
+    const subMenu = document.getElementById('subMenu');
+    const directionTitle = document.getElementById('directionTitle');
+    const overhorenBtn = document.getElementById('overhorenBtn');
+    const flashcardsBtn = document.getElementById('flashcardsBtn');
+    const backBtn = document.getElementById('backBtn');
+
+    let direction = null;
+
+    document.getElementById('toNlAmazigh').onclick = function() {
+      direction = 'nl-amazigh';
+      mainMenu.classList.add('hidden');
+      directionTitle.textContent = "Nederlands → Amazigh";
+      overhorenBtn.href = "overhorennl.html";
+      flashcardsBtn.href = "flashcardsnl.html";
+      subMenu.classList.remove('hidden');
+    };
+    document.getElementById('toAmazighNl').onclick = function() {
+      direction = 'amazigh-nl';
+      mainMenu.classList.add('hidden');
+      directionTitle.textContent = "Amazigh → Nederlands";
+      overhorenBtn.href = "overhorenamazigh.html";
+      flashcardsBtn.href = "flashcardsamazigh.html";
+      subMenu.classList.remove('hidden');
+    };
+    backBtn.onclick = function() {
+      subMenu.classList.add('hidden');
+      mainMenu.classList.remove('hidden');
+    };
+  </script>
+</body>
+</html>
